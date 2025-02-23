@@ -3,10 +3,10 @@
 import { useRouter } from "next/navigation";
 import YoutubeVideoPlayer from "@/components/YoutubeVideoPlayer";
 
-export default function Home() {
+export default function Video() {
   const router = useRouter();
 
   return (
-    <YoutubeVideoPlayer state={"FORM"} onSave={() => router.push('/video')} />
+    <YoutubeVideoPlayer state={"VIDEO"} onEdit={() => router.push('/')} />
   );
 }
