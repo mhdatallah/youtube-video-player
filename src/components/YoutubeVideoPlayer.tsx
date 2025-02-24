@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import ReactPlayer from "react-player";
 
 interface YoutubeVideoPlayerProps {
@@ -11,6 +11,7 @@ const YoutubeVideoPlayer = ({ state, onSave, onEdit }: YoutubeVideoPlayerProps) 
   const [url, setUrl] = useState<string>();
   const [urlInput, setUrlInput] = useState<string>();
   const [lastPlayed, setLastPlayed] = useState<number>(0);
+  const playerRef = useRef<ReactPlayer>(null);
 
   useEffect(() => {
     const savedUrl = localStorage.getItem("videoURL") || undefined;
@@ -24,12 +25,19 @@ const YoutubeVideoPlayer = ({ state, onSave, onEdit }: YoutubeVideoPlayerProps) 
     if (!urlInput?.trim()) return;
     localStorage.setItem("videoURL", urlInput);
     localStorage.setItem("videoTime", "0");
+    setLastPlayed(0);
     if (typeof onSave === "function") onSave();
   };
 
   const handleProgress = (progress: { playedSeconds: number }) => {
     localStorage.setItem("videoTime", progress.playedSeconds.toString());
     setLastPlayed(progress.playedSeconds);
+  };
+
+  const handleReady = () => {
+    if (playerRef.current && lastPlayed > 0) {
+      playerRef.current.seekTo(lastPlayed, "seconds");
+    }
   };
 
   const renderForm = () => (
@@ -49,12 +57,14 @@ const YoutubeVideoPlayer = ({ state, onSave, onEdit }: YoutubeVideoPlayerProps) 
       {url ? (
         <>
           <ReactPlayer
+            ref={playerRef}
             url={url}
             playing
             controls
+            onReady={handleReady}
             onProgress={handleProgress}
             config={{
-              youtube: { playerVars: { autoplay: 1, start: lastPlayed } },
+              youtube: { playerVars: { autoplay: 1 } },
             }}
           />
           <button onClick={onEdit}>Edit</button>
