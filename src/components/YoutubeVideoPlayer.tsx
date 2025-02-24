@@ -41,19 +41,20 @@ const YoutubeVideoPlayer = ({ state, onSave, onEdit }: YoutubeVideoPlayerProps) 
   };
 
   const renderForm = () => (
-    <>
+    <div className="flex justify-center py-36 gap-4">
       <input
         type="text"
         placeholder="Enter YouTube URL"
         value={urlInput}
         onChange={(e) => setUrlInput(e.target.value)}
+        className="rounded-3xl px-2 w-[36rem] text-black"
       />
-      <button onClick={handleSave}>Save</button>
-    </>
+      <button onClick={handleSave} className="bg-green-600 text-white px-4 py-2 rounded-3xl">Save</button>
+    </div>
   );
 
   const renderVideo = () => (
-    <>
+    <div className="flex flex-col items-center py-12 gap-4">
       {url ? (
         <>
           <ReactPlayer
@@ -67,17 +68,16 @@ const YoutubeVideoPlayer = ({ state, onSave, onEdit }: YoutubeVideoPlayerProps) 
               youtube: { playerVars: { autoplay: 1 } },
             }}
           />
-          <button onClick={onEdit}>Edit</button>
+          <button onClick={onEdit} className="bg-yellow-600 text-white px-4 py-2 rounded-3xl">Edit</button>
         </>
       ) : (
         <p>No video selected. Go back to home.</p>
       )}
-    </>
+    </div>
   );
 
   return (
     <>
-      <h1>Youtube Video Player</h1>
       {state === "FORM" ? renderForm() : renderVideo()}
     </>
   );

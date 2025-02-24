@@ -27,6 +27,9 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <div className="p-4">
+          <h1 className="text-5xl text-center" >Youtube Video Player</h1>
+        </div>
         {children}
       </body>
     </html>
